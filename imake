@@ -3,7 +3,7 @@
 set -e
 
 echo "imake-wrapper: running imake $* in directory `pwd`"
-/usr/bin/X11/imake "$@"
+/usr/bin/imake -DHasGcc3=YES -I/usr/lib/X11/config "$@"
 if [ -f "$IMAKEAPPEND" ]; then
   cat "$IMAKEAPPEND" >> Makefile
 fi

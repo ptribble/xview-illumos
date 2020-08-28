@@ -1,7 +1,3 @@
-#ifndef lint
-static char *sccsid = "@(#)l10n_read.c 1.6 92/03/10";
-#endif
-
 /*
  * l10n_read.c - Reader for l10n configuration file(s)
  */
@@ -23,14 +19,6 @@ static char *sccsid = "@(#)l10n_read.c 1.6 92/03/10";
 #define	NAME_SEPARATOR		'='
 #define	FIELD_SEPARATOR		'|'
 #define	ITEM_SEPARATOR		';'
-
-
-#ifndef __linux__
-#ifndef ultrix
-extern char	*malloc();
-#endif
-extern char	*calloc();
-#endif
 
 
 /*

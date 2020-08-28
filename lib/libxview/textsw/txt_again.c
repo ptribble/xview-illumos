@@ -19,7 +19,7 @@ static char     sccsid[] = "@(#)txt_again.c 20.43 93/06/28";
 #include <xview_private/txt_impl.h>
 #include <xview_private/ev_impl.h>
 #include <xview_private/txt_18impl.h>
-#if defined SVR4 || defined __linux__
+#if defined SVR4 || defined __sun__
 #include <stdlib.h>
 #include <string.h>
 #endif /* SVR4 */
@@ -179,7 +179,7 @@ textsw_string_min_free(ptr_to_string, min_free_desired)
  * Recording routines
  */
 
-#ifdef __linux__
+#ifdef __sun__
 /* The textsw_printf as written created a FILE struct, and called
  * _doprnt() to format the text to an XView internal buffer. If I
  * understand this correctly, it's just a replacement for vsprintf.
@@ -208,7 +208,7 @@ va_dcl
     TXTSW_STRING_FREE(ptr_to_string) += strlen(sfree);
     return (result);
 }
-#else /* __linux__ */
+#else /* __sun__ */
 /*
  * Following is stolen from 3.2ALPHA sprintf(str, fmt, va_alist) SIDE_EFFECT:
  * TXTSW_STRING_FREE(ptr_to_string) is modified by this routine.
@@ -355,7 +355,7 @@ va_dcl
 }     
 
 #endif /* SVR4 */
-#endif /* __linux__ */
+#endif /* __sun__ */
 
 static	void
 textsw_record_buf(again, buffer, buffer_length)
@@ -645,7 +645,7 @@ textsw_record_trash_insert(textsw)
  * Replaying routines
  */
 
-#ifdef __linux__
+#ifdef __sun__
 /* The textsw_scanf as written created a FILE struct, and called
  * _doscan() to do the scanning on the instring.
  * This depends heavily on the internal structure of FILE, and is not
@@ -723,7 +723,7 @@ va_dcl
     TXTSW_STRING_BASE(ptr_to_string) = sbase;
     return (result);
 }
-#else /* __linux__ */
+#else /* __sun__ */
 /*
  * Following is stolen from sscanf(str, fmt, args) SIDE_EFFECT:
  * TXTSW_STRING_BASE(ptr_to_string) is modified by this routine.
@@ -816,7 +816,7 @@ va_dcl
 
 #endif /* OW_I18N */
 }
-#endif /* __linux__ */
+#endif /* __sun__ */
 
 static int
 textsw_next_is_delimiter(again)

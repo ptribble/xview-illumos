@@ -40,6 +40,7 @@ Pkg_private Xv_opaque 	win_delete_drop_item();
 static 		void	set_mask_bit(),
 			unset_mask_bit(),
 			window_set_event_mask(),
+			window_set_softkey_labels(),
 			window_grab_selectbutton(),
     			window_ungrab_selectbutton(),
 			win_map(),

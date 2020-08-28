@@ -1,7 +1,3 @@
-#ifndef lint
-static char sccsid[] = "@(#)textedit.c 15.50 90/05/22";
-#endif
-
 /*
  * Copyright (c) 1986, 1987, 1988 by Sun Microsystems, Inc.
  */
@@ -12,9 +8,9 @@ static char sccsid[] = "@(#)textedit.c 15.50 90/05/22";
  */
 
 #include <sys/param.h> /* MAXPATHLEN (include types.h if removed) */
-#include <sys/dir.h>   /* MAXNAMLEN */
 #include <sys/stat.h>
 
+#include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <strings.h>
@@ -31,17 +27,13 @@ static char sccsid[] = "@(#)textedit.c 15.50 90/05/22";
 #include <xview/sel_svc.h>
 #include <xview/sel_attrs.h>
 
-#ifdef ecd.help
-#include <suntool/help.h>
-#endif
-
 /*
  * The presence of this line caused textedit not to be built
  * The function is already defined in the XView libraries
 long	textsw_store_file();
 */
 char	*getwd();
-#ifndef __linux__
+#ifndef __sun
 char *sprintf();
 #endif
 void	frame_cmdline_help();
@@ -52,7 +44,7 @@ extern Notify_value	textedit_event_proc();
 */
 
 static Frame		base_frame;
-static char		current_filename[MAXNAMLEN];
+static char		current_filename[MAXNAMELEN];
 static char		current_directory[MAXPATHLEN];
 static int		handling_signal;
 static Textsw		textsw;
@@ -245,7 +237,7 @@ set_name_frame(textsw_local, attributes)
 	Textsw		 textsw_local;
 	Attr_avlist	 attributes;
 {
-	char		 frame_label[50+MAXNAMLEN+MAXPATHLEN];
+	char		 frame_label[50+MAXNAMELEN+MAXPATHLEN];
 	Icon		 edit_icon;
 	char		 icon_text[sizeof(frame_label)];
 	char		 *ptr;
@@ -523,9 +515,6 @@ textedit_main(argc, argv)
 	    FRAME_LABEL,		"Text Editor",
 	    FRAME_SHOW_LABEL,		TRUE,
 	    FRAME_CMDLINE_HELP_PROC,	my_frame_help,
-#ifdef ecd.help
-	    HELP_DATA,			"sunview:textedit",
-#endif
 	    0);
 
 	/*
@@ -822,10 +811,10 @@ textedit_main(argc, argv)
 	 * Setup signal handlers.
 	 */
 	(void)notify_set_signal_func(base_frame, mysigproc, SIGINT,  NOTIFY_ASYNC);
-#if !defined(__linux__) || defined(SIGXCPU)
+#if !defined(__sun) || defined(SIGXCPU)
 	(void)notify_set_signal_func(base_frame, mysigproc, SIGXCPU, NOTIFY_ASYNC);
 #endif
-#if !defined(__linux__) || defined(SIGBUS)
+#if !defined(__sun) || defined(SIGBUS)
 	(void)notify_set_signal_func(base_frame, mysigproc, SIGBUS,  NOTIFY_ASYNC);
 #endif
 	(void)notify_set_signal_func(base_frame, mysigproc, SIGHUP,  NOTIFY_ASYNC);
@@ -910,14 +899,9 @@ mysigproc(me, sig, when)
 	int			 sig;
 	Notify_signal_mode	 when;
 {
-	char			 name_to_use[MAXNAMLEN];
+	char			 name_to_use[MAXNAMELEN];
 	int			 pid = getpid();
 	int			 was_SIGILL = (sig == SIGILL);
-#ifndef __linux__
-	struct sigvec vec;
-#else
-	struct sigaction vec;
-#endif
 
 	if (handling_signal == 2)
 	    _exit(3);
@@ -969,53 +953,7 @@ Done:
 Die:
 	(void)fprintf(stderr, "aborting for post-mortem ...\n");
 	(void)fflush(stderr);
-	(void)sigsetmask(0);		/* Make sure signals get through */
-	if (was_SIGILL) {
-#ifndef lint
-	    char	dummy, *bad_ptr = 0;
-	    /* (void)signal(SIGSEGV, SIG_DFL);	/* Make sure 0 deref dumps. */
-#ifndef __linux__
-	    vec.sv_handler = SIG_DFL;
-	    vec.sv_mask = vec.sv_onstack = 0;
-	    sigvec(SIGSEGV, &vec, 0);
-#else
-	    vec.sa_handler = SIG_DFL;
-#if 1
-/* martin.buck@bigfoot.com */
-            sigemptyset(&vec.sa_mask);
-#else
-	    vec.sa_mask = 0;
-#endif
-	    vec.sa_flags = 0;
-/* mbuck@debian.org */
-#if 0
-	    vec.sa_restorer = NULL;
-#endif
-	    sigaction(SIGSEGV, &vec, (struct sigaction *)0);
-#endif
-	    dummy = *bad_ptr;
-#endif
-	} else {
-	    /* (void)signal(SIGILL, SIG_DFL);	/* Make sure abort() dumps. */
-#ifndef __linux__
-            vec.sv_handler = SIG_DFL; 
-	    vec.sv_mask = vec.sv_onstack = 0; 
-            sigvec(SIGILL, &vec, 0);
-#else
-	    vec.sa_handler = SIG_DFL;
-#if 1
-/* martin.buck@bigfoot.com */
-            sigemptyset(&vec.sa_mask);
-#else
-	    vec.sa_mask = 0;
-#endif
-	    vec.sa_flags = 0;
-/* mbuck@debian.org */
-#if 0
-	    vec.sa_restorer = NULL;
-#endif
-	    sigaction(SIGILL, &vec, (struct sigaction *)0);
-#endif
+	if (!was_SIGILL) {
 	    abort();
 	}
 	return(NOTIFY_DONE);

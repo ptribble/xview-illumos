@@ -224,6 +224,43 @@ int		key;		/* squirrled away for KEY_DATA */
 int		lastw;
 int		lasth;
 
+static int
+min (a, b)
+	int a, b;
+{
+	return (a<b?a:b);
+}
+	
+static int
+armwidth (r) 
+{
+	int w;
+	float fudge = 1.0 + (20.0/r);
+	if (fudge > 1.6) fudge = 1.6;
+	w = (int) rint ((double)fudge * r/ 8.0);
+	if (w%2 == 0) w++;
+	return (w);
+}
+
+static int
+seconds_on (o)
+	Options o;
+{
+	if (o==NULL) return (0);
+	return (o-> seconds);
+}
+
+
+
+static int
+date_on (o)
+	Options o;
+{
+	int v;
+	if (o==NULL) return (0);
+	return (o-> date);
+}
+
 void
 print_event (handle, event)
 Xv_window	handle;
@@ -519,14 +556,6 @@ init_images (c, w, h)
 	paint_ticks (dotspr, w/2, spotpr);
 }
 
-static int
-min (a, b)
-	int a, b;
-{
-	return (a<b?a:b);
-}
-	
-
 static Notify_value 
 clock_resize_proc (canvas, width, height)
 	Canvas canvas;
@@ -639,18 +668,6 @@ draw_line(pr, offset, x1,y1,x2,y2,color)
 	pw_vector(pr,-x1+offset,-y1+offset,
 		-x2+offset,-y2+offset,PIX_SRC,color);
 }
-
-static int
-armwidth (r) 
-{
-	int w;
-	float fudge = 1.0 + (20.0/r);
-	if (fudge > 1.6) fudge = 1.6;
-	w = (int) rint ((double)fudge * r/ 8.0);
-	if (w%2 == 0) w++;
-	return (w);
-}
-
 
 static void
 paint_ticks (pw, radius, spotpr)
@@ -1476,25 +1493,6 @@ digital_on (o)
 	int v;
 	if (o==NULL) return (0);
 	return (o-> face == digital);
-}
-
-static int
-seconds_on (o)
-	Options o;
-{
-	if (o==NULL) return (0);
-	return (o-> seconds);
-}
-
-
-
-static int
-date_on (o)
-	Options o;
-{
-	int v;
-	if (o==NULL) return (0);
-	return (o-> date);
 }
 
 static void

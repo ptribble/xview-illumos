@@ -1,4 +1,6 @@
+#ifdef IDENT
 #ident	"@(#)gettext.c	1.10	93/06/28 SMI"
+#endif
 
 /*
  *      (c) Copyright 1989 Sun Microsystems, Inc.
@@ -11,25 +13,16 @@
 
 #include "gettext.h"
 
-#if defined(__linux__) && !defined(LC_MESSAGES)
-#define LC_MESSAGES LC_RESPONSE
-#endif
-
 #ifdef SYSV
 #define bzero(a,b) memset(a,0,b)
 #endif
 
-#if !defined(__linux__) || !defined(__GLIBC__)
-char *malloc(), *strdup();
-#endif
-char * dgettext(char *, char *);
+char * dgettext();
 char *_gettext();
 char *in_path();
 char *fgets(), *getenv();
-#if !defined(__linux__) || !defined(__GLIBC__)
-caddr_t mmap(), calloc();
-#endif
 
+#ifdef NOT
 static struct domain_binding *firstbind=0, *lastbind=0;
 
 static void
@@ -418,3 +411,4 @@ char *_gettext( messages, key_string )
     } /* for (;;) */
 }
 
+#endif

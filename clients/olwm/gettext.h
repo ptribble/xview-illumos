@@ -27,6 +27,8 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/param.h>
+#include <string.h>
+#include <stdlib.h>
  
 struct domain_binding {
     char    *domain_name;

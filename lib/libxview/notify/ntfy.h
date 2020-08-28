@@ -32,7 +32,7 @@ extern int sigisemptyset(const sigset_t *);
 #include <xview_private/ultrix_cpt.h>
 #include <sys/time.h>
 #ifdef SVR4
-#include <sys/rusage.h>
+/* #include <sys/rusage.h> */
 #endif
 #include <sys/resource.h>
 #include <xview/notify.h>

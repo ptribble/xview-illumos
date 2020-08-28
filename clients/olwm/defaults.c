@@ -57,9 +57,6 @@ GetUserDefaults(dpy)
     char *homedir = getenv("HOME");
     char *envfile = getenv("XENVIRONMENT");
     char hostname[100];
-#ifndef __linux__
-    int namelen;
-#endif
 
     rsrcstr = GetWindowProperty(dpy, RootWindow(dpy, 0), XA_RESOURCE_MANAGER,
 	0L, 100000000L, /* REMIND: use ENTIRE_CONTENTS */
@@ -82,11 +79,7 @@ GetUserDefaults(dpy)
 	if (homedir != NULL) {
 	    (void) strcpy(filename, homedir);
 	    (void) strcat(filename, "/.Xdefaults-");
-#ifndef __linux__
-	    if (0 == gethostname(hostname, sizeof(hostname), &namelen)) {
-#else
 	    if (0 == gethostname(hostname, sizeof(hostname))) {
-#endif
 		(void) strcat(filename, hostname);
 		fileDB = XrmGetFileDatabase(filename);
 	    }

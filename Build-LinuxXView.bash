@@ -19,33 +19,33 @@ fi
 # Set the directories that will be used for installation
 [ -z "$OPENWINHOME" ] && OPENWINHOME=/usr/openwin
 [ -z "$X11DIR" ] && X11DIR=/usr/X11R6
-OWDEST=$DESTDIR$OPENWINHOME
-X11DEST=$DESTDIR$X11DIR/lib/X11/config
+OWDEST=$INSTPREFIX$OPENWINHOME
+X11DEST=$INSTPREFIX$X11DIR/lib/X11/config
 
 # Generate file that gets appended to every Makefile created by the imake-wrapper
 
-# BUILDPREFIX can be used to compile with shared libraries not installed in
-# the standard locations
 if [ -n "$BUILDPREFIX" ]; then
-  IMAKE_EXTRA_INCLUDES="-I$BUILDPREFIX/usr/X11R6/include -I$BUILDPREFIX/usr/include -I$BUILDPREFIX/usr/include/X11"
-  IMAKE_EXTRA_LOCAL_LDFLAGS="-L$BUILDPREFIX/usr/X11R6/lib -L$BUILDPREFIX/usr/lib -L$BUILDPREFIX/lib"
+  IMAKE_EXTRA_INCLUDES="-I$BUILDPREFIX/usr/X11R6/include -I$BUILDPREFIX/usr/include"
+  IMAKE_EXTRA_LOCAL_LDFLAGS="-L$BUILDPREFIX/usr/X11R6/lib -L$BUILDPREFIX/usr/lib"
 fi
 cat > imake.append <<EOF
 
 # Variable-definitions appended by imake-wrapper
   XVDESTDIR      = $OWDEST
-  EXTRA_DEFINES  = -DOPENWINHOME_DEFAULT=\"$OPENWINHOME\" -D_GNU_SOURCE
+  EXTRA_DEFINES  = -DOPENWINHOME_DEFAULT=\"$OPENWINHOME\"
   CONFIGDIR      = $X11DEST
-  INCLUDES      := -I`pwd`/build/include $IMAKE_EXTRA_INCLUDES -I$OWDEST/include \$(INCLUDES)
-  LOCAL_LDFLAGS := -L`pwd`/lib/libolgx -L`pwd`/lib/libxview $IMAKE_EXTRA_LOCAL_LDFLAGS -L$OWDEST/lib \$(LOCAL_LDFLAGS)
-  MAKEOVERRIDES  =
-  CFLAGS        += \$(EXTRA_CFLAGS)
+  INCLUDES      ?=
+  INCLUDES      := -I`pwd`/build/include -I$OWDEST/include $IMAKE_EXTRA_INCLUDES \$(INCLUDES)
+  LOCAL_LDFLAGS ?=
+  LOCAL_LDFLAGS := -L$OWDEST/lib $IMAKE_EXTRA_LOCAL_LDFLAGS \$(LOCAL_LDFLAGS)
 # End of variable-definitions appended by imake-wrapper
 
 EOF
+#INCLUDES      := -I`pwd`/build/include -I$OWDEST/include $IMAKE_EXTRA_INCLUDES -I/usr/X11R6/include \$(INCLUDES)
+#LOCAL_LDFLAGS := -L$OWDEST/lib $IMAKE_EXTRA_LOCAL_LDFLAGS -L/usr/X11R6/lib \$(LOCAL_LDFLAGS)
 
 IMAKEAPPEND="`pwd`/imake.append"
-IMAKEINCLUDE="-I`pwd`/config -I$BUILDPREFIX/usr/lib/X11/config -I$BUILDPREFIX/usr/X11R6/lib/X11/config -I/usr/lib/X11/config -I/usr/X11R6/lib/X11/config"
+IMAKEINCLUDE="-I`pwd`/config -DMakeCmd=gmake"
 
 # Make sure our wrappers are in the path
 if [ -z "$XVIEW_SETUP" ]; then

@@ -1048,7 +1048,7 @@ notify_get_signal_code()
     return (ndet_signal_code);
 }
 
-#if !defined(SVR4) && !defined(__linux__)
+#if !defined(xxSVR4) && !defined(__linux__)
 extern struct sigcontext *
 #else /* SVR4 */
 extern ucontext_t *

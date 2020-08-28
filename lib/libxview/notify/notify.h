@@ -23,12 +23,13 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <xview/base.h>
-#ifndef __linux__
+#ifndef __sun__
 # ifdef SYSV_WAIT
 #  include <sys/rusage.h>
 # endif 
 #endif
-#ifdef SYSV_UCONTEXT
+/* #ifdef SYSV_UCONTEXT */
+#ifdef __sun__
 # include <sys/ucontext.h>
 #else
 typedef int ucontext_t;
@@ -224,7 +225,8 @@ extern	struct itimerval NOTIFY_NO_ITIMER;	/* {{0,0},{0,0}} */
 
 #ifndef _NOTIFY_MIN_SYMBOLS
 
-#ifdef SYSV_WAIT
+/* #ifdef SYSV_WAIT */
+#ifdef __sun__
 EXTERN_FUNCTION (Notify_value   notify_default_wait3, (Notify_client nclient, int pid, int  *status, struct rusage *rusage));
 #define notify_default_waitpid notify_default_wait3
 #else
@@ -310,7 +312,7 @@ EXTERN_FUNCTION (Notify_value 	notify_next_itimer_func, (Notify_client nclient, 
 EXTERN_FUNCTION (Notify_value	notify_next_output_func, (Notify_client nclient, int fd));
 EXTERN_FUNCTION (Notify_value 	notify_next_signal_func, (Notify_client nclient, int signal, Notify_signal_mode mode));
 
-#ifdef SYSV_WAIT
+#ifdef __sun__
 EXTERN_FUNCTION (Notify_value 	notify_next_wait3_func, (Notify_client nclient, int pid, int  *status, struct rusage *rusage));
 #define notify_next_waitpid_func notify_next_wait3_func
 #else

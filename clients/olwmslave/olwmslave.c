@@ -73,12 +73,7 @@ main(argc,argv)
 	if ((openwinDir = getenv("OPENWINHOME")) != 0)
 		(void)strcpy(localePath,openwinDir);
 	else
-#ifndef OPENWINHOME_DEFAULT
-		/* martin-2.buck@student.uni-ulm.de */
-		(void)strcpy(localePath,OPENWINHOME_DEFAULT);
-#else
 		(void)strcpy(localePath,"/usr/share");
-#endif
 	(void)strcat(localePath,"/lib/locale");
 	(void)bindtextdomain(domain,localePath);
 	textdomain(domain);

@@ -1176,7 +1176,7 @@ flist_update_list( private, rows, num_rows )
  * ifdef'd for SVR4 because it causes the 4.x MIT build to fail, not just print
  * warnings.
  */
-#ifdef SVR4
+#ifdef xxSVR4
 static int	sed, nbra, circf;
 static char	*loc1, *loc2, *locs;
 static int 	advance();

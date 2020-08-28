@@ -10,7 +10,9 @@ static char     sccsid[] = "@(#)gettext.c 50.21 93/06/28";
 #include <string.h>
 #include <xview_private/gettext.h>
 
+#ifndef __sun__
 char * dgettext(char *, char *), *bindtextdomain();
+#endif
 static char *_gettext();
 char *fgets(), *getenv();
 #if !defined(__linux__) || !defined(__GLIBC__)
@@ -133,6 +135,7 @@ lookupdefbind(domain_name)
     return (NULL);
 }
 
+#ifndef __sun__
 char *
 bindtextdomain(domain_name, binding)
     char    *domain_name;
@@ -216,6 +219,7 @@ bindtextdomain(domain_name, binding)
     bind->nextdomain = NULL;
     return (bind->binding);
 }
+#endif
 
 static char *
 findtextdomain(domain_name)
@@ -243,7 +247,7 @@ findtextdomain(domain_name)
 }
  
     
-
+#ifndef __sun__
 char *
 textdomain(domain_name)
     char    *domain_name;
@@ -274,15 +278,18 @@ textdomain(domain_name)
 
     return(current_domain);
 }
+#endif
 
+#ifndef __sun__
 char *
 gettext(msg_id)
 char *msg_id;
 {
     return (dgettext(NULL, msg_id));
 }
+#endif
 
-
+#ifndef __sun__
 char *
 dgettext(domain_name, msg_id)
     char    *domain_name;
@@ -449,7 +456,7 @@ dgettext(domain_name, msg_id)
 
     return (_gettext(cur_mess_so,msg_id));
 }
-
+#endif
 
 static char *
 _gettext( messages, key_string )

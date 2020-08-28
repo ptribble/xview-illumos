@@ -1552,7 +1552,7 @@ textsw_reset_2(abstract, locx, locy, preserve_memory, cmd_is_undo_all_edit)
     int             cmd_is_undo_all_edit;	/* This is for doing an "Undo
 						 * All edit" */
 {
-#ifndef SVR4
+#ifndef XXSVR4
     pkg_private Es_status textsw_checkpoint_internal();
 #else /* SVR4 */
     static Es_status textsw_checkpoint_internal();
@@ -2400,7 +2400,7 @@ Error:
     return (result);
 }
 
-#ifndef SVR4
+#ifndef XXSVR4
 Pkg_private     Es_status
 #else /* SVR4 */
 static     Es_status

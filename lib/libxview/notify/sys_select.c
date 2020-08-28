@@ -39,12 +39,12 @@ extern          errno;
 #endif 
 
 pkg_private int
-#ifndef SVR4
+#ifndef xxSVR4
 notify_select(nfds, readfds, writefds, exceptfds, tv)
 #else /* SVR4 */
 notify_select(nfds, in0, out0, ex0, tv)
 #endif /* SVR4 */
-#ifndef SVR4
+#ifndef xxSVR4
 #ifndef __linux__
     int             nfds, *readfds, *writefds, *exceptfds;
 #else
@@ -58,9 +58,10 @@ notify_select(nfds, in0, out0, ex0, tv)
     struct timeval *tv;
 {
 
-#ifndef SVR4
+#ifndef xxSVR4
 #ifndef __linux__
-    nfds = syscall(SYS_select, nfds, readfds, writefds, exceptfds, tv);
+  /* nfds = syscall(SYS_select, nfds, readfds, writefds, exceptfds, tv); */
+    nfds = select(nfds, readfds, writefds, exceptfds, tv);
     ntfy_assert(!(nfds == 0 && tv == (struct timeval *) 0 &&
 		  *readfds == 0 && *writefds == 0 && *exceptfds == 0), 39
 		/* SYS_select returned when no stimuli */);
