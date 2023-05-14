@@ -17,26 +17,25 @@ To build, installing into a tree based on /tmp/xv:
 
 env CC=gcc PATH=/usr/gnu/bin:$PATH OPENWINHOME=/usr X11DIR=/usr bash Build-LinuxXView.bash libs
 
+Depending on your style of shell, either
+export PWDTOP=`pwd`
+or
+setenv PWDTOP `pwd`
+
 cd lib
-env IMAKEINCLUDE="-I`pwd`/config -I/usr/lib/X11/config" gmake Makefiles
-env IMAKEINCLUDE="-I`pwd`/config -I/usr/lib/X11/config" gmake CC=gcc CCOPTIONS= CDEBUGFLAGS= includes
-env IMAKEINCLUDE="-I`pwd`/config -I/usr/lib/X11/config" gmake CC=gcc CCOPTIONS=-I`pwd`/.. CDEBUGFLAGS=
-env IMAKEINCLUDE="-I`pwd`/config -I/usr/lib/X11/config" gmake -k install CC=gcc CCOPTIONS= CDEBUGFLAGS= INSTALL=ginstall DESTDIR=/tmp/xv
+env IMAKEINCLUDE="-I${PWDTOP}/config -I/usr/lib/X11/config -DHasGcc3=YES" gmake Makefiles
+env IMAKEINCLUDE="-I${PWDTOP}/config -I/usr/lib/X11/config" gmake CC=gcc CCOPTIONS= CDEBUGFLAGS= includes
+env IMAKEINCLUDE="-I${PWDTOP}/config -I/usr/lib/X11/config" gmake CC=gcc CCOPTIONS=-I`pwd`/.. CDEBUGFLAGS=
+env IMAKEINCLUDE="-I${PWDTOP}/config -I/usr/lib/X11/config" gmake -k install CC=gcc CCOPTIONS= CDEBUGFLAGS= INSTALL=ginstall DESTDIR=/tmp/xv
 cd ..
-
-Need to dissuade it of the /usr/openwin notion
-
-mv /tmp/xv/usr/openwin/include /tmp/xv/usr
-mv /tmp/xv/usr/openwin/lib /tmp/xv/usr
-rmdir /tmp/xv/usr/openwin
 
 env CC=gcc PATH=/usr/gnu/bin:$PATH OPENWINHOME=/usr X11DIR=/usr bash Build-LinuxXView.bash clients
 
 cd clients
-env IMAKEINCLUDE="-I`pwd`/config -I/usr/lib/X11/config -DHasGcc3=YES" gmake Makefiles
-env IMAKEINCLUDE="-I`pwd`/config -I/usr/lib/X11/config" gmake CC=gcc CCOPTIONS= CDEBUGFLAGS="-O -I/tmp/xv/usr/include" includes
-env LD_LIBRARY_PATH=/tmp/xv/usr/lib IMAKEINCLUDE="-I`pwd`/config -I/usr/lib/X11/config" gmake CC=gcc CCOPTIONS= CDEBUGFLAGS="-O -I/tmp/xv/usr/include"
-env LD_LIBRARY_PATH=/tmp/xv/usr/lib IMAKEINCLUDE="-I`pwd`/config -I/usr/lib/X11/config" gmake -k install CC=gcc CCOPTIONS= CDEBUGFLAGS= INSTALL=ginstall DESTDIR=/tmp/xv
+env IMAKEINCLUDE="-I${PWDTOP}/config -I/usr/lib/X11/config -DHasGcc3=YES" gmake Makefiles
+env IMAKEINCLUDE="-I${PWDTOP}/config -I/usr/lib/X11/config" gmake CC=gcc CCOPTIONS= CDEBUGFLAGS="-O -I/tmp/xv/usr/include" includes
+env LD_LIBRARY_PATH=/tmp/xv/usr/lib IMAKEINCLUDE="-I${PWDTOP}/config -I/usr/lib/X11/config" gmake CC=gcc CCOPTIONS= CDEBUGFLAGS="-O -I/tmp/xv/usr/include"
+env LD_LIBRARY_PATH=/tmp/xv/usr/lib IMAKEINCLUDE="-I${PWDTOP}/config -I/usr/lib/X11/config" gmake -k install CC=gcc CCOPTIONS= CDEBUGFLAGS= INSTALL=ginstall DESTDIR=/tmp/xv
 cd ..
 
 mv /tmp/xv/usr/share/openwin/help /tmp/xv/usr/lib
