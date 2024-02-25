@@ -25,7 +25,7 @@ setenv PWDTOP `pwd`
 cd lib
 env IMAKEINCLUDE="-I${PWDTOP}/config -I/usr/lib/X11/config -DHasGcc3=YES" gmake Makefiles
 env IMAKEINCLUDE="-I${PWDTOP}/config -I/usr/lib/X11/config" gmake CC=gcc CCOPTIONS= CDEBUGFLAGS= includes
-env IMAKEINCLUDE="-I${PWDTOP}/config -I/usr/lib/X11/config" gmake CC=gcc CCOPTIONS=-I`pwd`/.. CDEBUGFLAGS=
+env IMAKEINCLUDE="-I${PWDTOP}/config -I/usr/lib/X11/config" gmake CC=gcc CCOPTIONS=-I`pwd`/.. CDEBUGFLAGS=-fcommon
 env IMAKEINCLUDE="-I${PWDTOP}/config -I/usr/lib/X11/config" gmake -k install CC=gcc CCOPTIONS= CDEBUGFLAGS= INSTALL=ginstall DESTDIR=/tmp/xv
 cd ..
 
