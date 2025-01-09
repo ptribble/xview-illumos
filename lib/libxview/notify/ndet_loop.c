@@ -87,7 +87,11 @@ static struct sigcontext *ndet_signal_context;
 #else /* SVR4 */
 pkg_private_data struct sigaction ndet_sigvec =
 #ifndef __linux__
+#ifndef _LP64
 	{SA_RESTART, {ndet_signal_catcher}, {0}, {0,0}};
+#else
+	{SA_RESTART, {ndet_signal_catcher}, {0}};
+#endif
 #else
 	{ndet_signal_catcher,0,SA_RESTART,NULL}; /* handler,mask,flags,restorer */
 #endif

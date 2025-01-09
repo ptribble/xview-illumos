@@ -559,7 +559,7 @@ va_dcl
 #if (__GLIBC__ > 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1)
 	    __va_copy(args, args_save);
 #else
-	    args = args_save;
+	    va_copy(args, args_save);
 #endif	    
 	    result = generic_get(object, &status, (Attr_attribute) attr, args);
 	    va_end(args);
@@ -582,7 +582,7 @@ va_dcl
 #if (__GLIBC__ > 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1)
 	__va_copy(args, args_save);
 #else
-        args = args_save;
+        va_copy(args, args_save);
 #endif	
 
 	/* ask the object to handle the get */
